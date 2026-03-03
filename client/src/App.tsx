@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Simulator from "./pages/Simulator";
 import Leaderboard from "./pages/Leaderboard";
+import FAQ from "./pages/FAQ";
+import { EpochCountdown } from "./components/EpochCountdown";
 
 function Router() {
   return (
@@ -14,6 +16,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/simulator" component={Simulator} />
       <Route path="/leaderboard" component={Leaderboard} />
+      <Route path="/faq" component={FAQ} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -30,6 +33,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
+          <EpochCountdown />
           <Toaster />
           <Router />
         </TooltipProvider>

@@ -56,6 +56,11 @@ export default function Home() {
                     View Leaderboard
                   </Button>
                 </Link>
+                <Link href="/faq">
+                  <Button variant="outline" className="border-2 border-slate-300 text-slate-900 font-bold px-8 py-3">
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -198,15 +203,17 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Sensor */}
-            <div className="card-blueprint">
+            <div className="card-blueprint hover:border-cyan-500">
               <div className="relative z-10">
                 <div className="text-5xl font-black text-cyan-600 mb-4">📊</div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Sensor</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Sensor</h3>
+                <p className="text-xs text-slate-600 mb-4 font-mono uppercase tracking-widest">Entry Level</p>
                 <ul className="text-sm text-slate-600 space-y-2 mb-6">
                   <li>✓ Temperature, humidity, air quality</li>
                   <li>✓ Low power consumption</li>
-                  <li>✓ Base APY: 5%</li>
-                  <li>✓ Min stake: 10 CTC</li>
+                  <li>✓ Base APY: <strong className="text-cyan-600">5%</strong></li>
+                  <li>✓ Min stake: <strong className="text-cyan-600">10 CTC</strong></li>
+                  <li>✓ Max stake: <strong className="text-cyan-600">500 CTC</strong></li>
                 </ul>
                 <Button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold">
                   Deploy Sensor
@@ -215,15 +222,17 @@ export default function Home() {
             </div>
 
             {/* Gateway */}
-            <div className="card-blueprint">
+            <div className="card-blueprint hover:border-pink-500">
               <div className="relative z-10">
                 <div className="text-5xl font-black text-pink-600 mb-4">🌐</div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Gateway</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Gateway</h3>
+                <p className="text-xs text-slate-600 mb-4 font-mono uppercase tracking-widest">Intermediate</p>
                 <ul className="text-sm text-slate-600 space-y-2 mb-6">
                   <li>✓ Network relay & aggregation</li>
                   <li>✓ Higher bandwidth</li>
-                  <li>✓ Base APY: 15%</li>
-                  <li>✓ Min stake: 50 CTC</li>
+                  <li>✓ Base APY: <strong className="text-pink-600">15%</strong></li>
+                  <li>✓ Min stake: <strong className="text-pink-600">50 CTC</strong></li>
+                  <li>✓ Max stake: <strong className="text-pink-600">750 CTC</strong></li>
                 </ul>
                 <Button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold">
                   Deploy Gateway
@@ -232,15 +241,17 @@ export default function Home() {
             </div>
 
             {/* Verifier */}
-            <div className="card-blueprint">
+            <div className="card-blueprint hover:border-cyan-500">
               <div className="relative z-10">
                 <div className="text-5xl font-black text-cyan-600 mb-4">✓</div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Verifier</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Verifier</h3>
+                <p className="text-xs text-slate-600 mb-4 font-mono uppercase tracking-widest">Advanced</p>
                 <ul className="text-sm text-slate-600 space-y-2 mb-6">
                   <li>✓ Proof-of-Contribution validation</li>
                   <li>✓ Highest rewards</li>
-                  <li>✓ Base APY: 50%</li>
-                  <li>✓ Min stake: 100 CTC</li>
+                  <li>✓ Base APY: <strong className="text-cyan-600">50%</strong></li>
+                  <li>✓ Min stake: <strong className="text-cyan-600">100 CTC</strong></li>
+                  <li>✓ Max stake: <strong className="text-cyan-600">1000 CTC</strong></li>
                 </ul>
                 <Button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold">
                   Deploy Verifier
@@ -269,6 +280,11 @@ export default function Home() {
                 <Link href="/leaderboard">
                   <Button variant="outline" className="border-2 border-slate-300 text-slate-900 font-bold px-8 py-3 text-lg">
                     View Leaderboard
+                  </Button>
+                </Link>
+                <Link href="/faq">
+                  <Button variant="outline" className="border-2 border-slate-300 text-slate-900 font-bold px-8 py-3 text-lg">
+                    FAQ
                   </Button>
                 </Link>
               </div>

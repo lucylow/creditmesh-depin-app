@@ -24,3 +24,9 @@
 - [x] All tests passing (8/8)
 - [x] Fix any errors and bugs
 - [ ] Deploy to Manus with permanent link
+
+## Improvements (Phase 2)
+- [x] Add epoch countdown timer with real-time updates
+- [x] Enhance device type cards with detailed specs
+- [x] Add FAQ section
+- [x] Improve navigation and UX

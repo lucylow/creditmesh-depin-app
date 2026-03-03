@@ -25,4 +25,44 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const devices = mysqlTable("devices", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id),
+  deviceType: mysqlEnum("deviceType", ["sensor", "gateway", "verifier"]).notNull(),
+  address: varchar("address", { length: 64 }).notNull().unique(),
+  stakedAmount: int("stakedAmount").default(0).notNull(),
+  totalEarned: int("totalEarned").default(0).notNull(),
+  reputation: int("reputation").default(0).notNull(),
+  isActive: int("isActive").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Device = typeof devices.$inferSelect;
+export type InsertDevice = typeof devices.$inferInsert;
+
+export const rewards = mysqlTable("rewards", {
+  id: int("id").autoincrement().primaryKey(),
+  deviceId: int("deviceId").notNull().references(() => devices.id),
+  epochNumber: int("epochNumber").notNull(),
+  rewardAmount: int("rewardAmount").notNull(),
+  rewardType: mysqlEnum("rewardType", ["device", "verifier", "contribution"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Reward = typeof rewards.$inferSelect;
+export type InsertReward = typeof rewards.$inferInsert;
+
+export const epochs = mysqlTable("epochs", {
+  id: int("id").autoincrement().primaryKey(),
+  epochNumber: int("epochNumber").notNull().unique(),
+  startTime: timestamp("startTime").notNull(),
+  endTime: timestamp("endTime").notNull(),
+  deviceRewardPool: int("deviceRewardPool").default(1000).notNull(),
+  verifierRewardPool: int("verifierRewardPool").default(200).notNull(),
+  totalDistributed: int("totalDistributed").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Epoch = typeof epochs.$inferSelect;
+export type InsertEpoch = typeof epochs.$inferInsert;

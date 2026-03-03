@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, devices, epochs, rewards, InsertDevice, InsertEpoch } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,115 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function getNetworkStats() {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const deviceCount = await db.select({ count: sql`COUNT(*)` }).from(users);
+    const totalStaked = await db.select({ total: sql`SUM(stakedAmount)` }).from(devices);
+    const totalEarned = await db.select({ total: sql`SUM(totalEarned)` }).from(devices);
+    const activeDevices = await db.select({ count: sql`COUNT(*)` }).from(devices).where(eq(devices.isActive, 1));
+
+    return {
+      deviceCount: (deviceCount[0]?.count as number) || 0,
+      totalStaked: (totalStaked[0]?.total as number) || 0,
+      totalEarned: (totalEarned[0]?.total as number) || 0,
+      activeDevices: (activeDevices[0]?.count as number) || 0,
+    };
+  } catch (error) {
+    console.error("[Database] Failed to get network stats:", error);
+    return null;
+  }
+}
+
+export async function getLeaderboard(limit = 10) {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const result = await db
+      .select()
+      .from(devices)
+      .where(eq(devices.isActive, 1))
+      .orderBy(desc(devices.totalEarned))
+      .limit(limit);
+
+    return result.map((device, index) => ({
+      rank: index + 1,
+      address: device.address,
+      deviceType: device.deviceType,
+      earned: device.totalEarned,
+      staked: device.stakedAmount,
+      reputation: device.reputation,
+    }));
+  } catch (error) {
+    console.error("[Database] Failed to get leaderboard:", error);
+    return [];
+  }
+}
+
+export async function getCurrentEpoch() {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const EPOCH_DURATION_MS = 24 * 60 * 60 * 1000;
+    const GENESIS = new Date("2026-01-01T00:00:00Z").getTime();
+    const now = Date.now();
+    const elapsed = now - GENESIS;
+    const epochNumber = Math.floor(elapsed / EPOCH_DURATION_MS) + 1;
+
+    const epoch = await db
+      .select()
+      .from(epochs)
+      .where(eq(epochs.epochNumber, epochNumber))
+      .limit(1);
+
+    if (epoch.length > 0) {
+      return epoch[0];
+    }
+
+    // Create epoch if it doesn't exist
+    const epochStart = GENESIS + (epochNumber - 1) * EPOCH_DURATION_MS;
+    const epochEnd = epochStart + EPOCH_DURATION_MS;
+
+    const newEpoch: InsertEpoch = {
+      epochNumber,
+      startTime: new Date(epochStart),
+      endTime: new Date(epochEnd),
+      deviceRewardPool: 1000,
+      verifierRewardPool: 200,
+      totalDistributed: 0,
+    };
+
+    await db.insert(epochs).values(newEpoch);
+    return newEpoch;
+  } catch (error) {
+    console.error("[Database] Failed to get current epoch:", error);
+    return null;
+  }
+}
+
+export async function createDevice(userId: number, deviceType: string, address: string, stakedAmount: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const newDevice: InsertDevice = {
+      userId,
+      deviceType: deviceType as "sensor" | "gateway" | "verifier",
+      address,
+      stakedAmount,
+      totalEarned: 0,
+      reputation: 0,
+      isActive: 1,
+    };
+
+    const result = await db.insert(devices).values(newDevice);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to create device:", error);
+    return null;
+  }
+}

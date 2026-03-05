@@ -301,6 +301,11 @@ export default function Home() {
                     FAQ
                   </Button>
                 </Link>
+                <Link href="/device-metrics">
+                  <Button variant="outline" className="border-2 border-slate-300 text-slate-900 font-bold px-8 py-3 text-lg">
+                    Device Metrics
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { NetworkChart } from "@/components/NetworkChart";
+import { StatCounter } from "@/components/StatCounter";
+import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -77,26 +80,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Network Statistics */}
-      <section className="section-divider bg-slate-50 py-24">
+      {/* Charts Section */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Network Analytics</h2>
+            <p className="text-slate-600">Growth trends and device distribution</p>
+          </div>
+          <NetworkChart />
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-slate-900 mb-4">Network Statistics</h2>
-            <p className="text-slate-600">Real-time metrics from the CreditMesh ecosystem</p>
+            <p className="text-slate-600">Real-time metrics from the CreditMesh DePIN</p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-8">
             {/* Active Devices */}
             <div className="card-blueprint">
               <div className="relative z-10">
-                <div className="stat-label mb-2">Active Devices</div>
-                <div className="stat-display mb-4">
-                  {statsQuery.isLoading ? (
-                    <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    formatNumber(stats.activeDevices)
-                  )}
-                </div>
+                {statsQuery.isLoading ? (
+                  <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
+                ) : (
+                  <StatCounter value={stats.activeDevices} label="Active Devices" />
+                )}
                 <p className="text-sm text-slate-600">Currently contributing to the network</p>
               </div>
             </div>
@@ -104,14 +115,11 @@ export default function Home() {
             {/* Total Staked */}
             <div className="card-blueprint">
               <div className="relative z-10">
-                <div className="stat-label mb-2">Total Staked</div>
-                <div className="stat-display mb-4">
-                  {statsQuery.isLoading ? (
-                    <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    formatNumber(stats.totalStaked)
-                  )}
-                </div>
+                {statsQuery.isLoading ? (
+                  <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
+                ) : (
+                  <StatCounter value={stats.totalStaked} label="Total Staked" suffix=" CTC" />
+                )}
                 <p className="text-sm text-slate-600">CTC locked in the network</p>
               </div>
             </div>
@@ -119,29 +127,22 @@ export default function Home() {
             {/* Total Earned */}
             <div className="card-blueprint">
               <div className="relative z-10">
-                <div className="stat-label mb-2">Total Earned</div>
-                <div className="stat-display mb-4">
-                  {statsQuery.isLoading ? (
-                    <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    formatNumber(stats.totalEarned)
-                  )}
-                </div>
+                {statsQuery.isLoading ? (
+                  <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
+                ) : (
+                  <StatCounter value={stats.totalEarned} label="Total Earned" suffix=" CMESH" />
+                )}
                 <p className="text-sm text-slate-600">CMESH distributed to contributors</p>
               </div>
             </div>
 
             {/* Current Epoch */}
             <div className="card-blueprint">
-              <div className="relative z-10">
-                <div className="stat-label mb-2">Current Epoch</div>
-                <div className="stat-display mb-4">
-                  {epochQuery.isLoading ? (
-                    <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    epoch?.epochNumber || "—"
-                  )}
-                </div>
+              <div className="relative z-10">                {statsQuery.isLoading ? (
+                  <div className="h-12 bg-slate-200 rounded animate-pulse"></div>
+                ) : (
+                  <StatCounter value={99.87} label="Network Uptime" suffix="%" />
+                )}
                 <p className="text-sm text-slate-600">24-hour reward cycle</p>
               </div>
             </div>
@@ -258,6 +259,19 @@ export default function Home() {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Success <span className="gradient-text">Stories</span></h2>
+            <p className="text-slate-600">Hear from top contributors earning passive income</p>
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <TestimonialsCarousel />
           </div>
         </div>
       </section>

@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useSimulator } from "@/hooks/useSimulator";
 
 export default function Simulator() {
   const [stake, setStake] = useState(100);
   const [deviceType, setDeviceType] = useState<"sensor" | "gateway" | "verifier">("sensor");
 
-  const simulatorQuery = trpc.simulator.calculate.useQuery({
+  const result = useSimulator({
     stake,
     deviceType,
+    reputation: 50,
   });
-
-  const result = simulatorQuery.data;
 
   const deviceInfo = {
     sensor: {
@@ -125,11 +124,7 @@ export default function Simulator() {
               <div className="relative z-10">
                 <div className="stat-label mb-2">Annual Percentage Yield</div>
                 <div className="stat-display text-cyan-600 mb-4">
-                  {simulatorQuery.isLoading ? (
-                    <div className="h-16 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    `${result?.apy || 0}%`
-                  )}
+                  {result.apy}%
                 </div>
                 <p className="text-sm text-slate-600">
                   Your estimated yearly return on staked CTC
@@ -142,11 +137,7 @@ export default function Simulator() {
               <div className="relative z-10">
                 <div className="stat-label mb-2">Daily Earnings</div>
                 <div className="stat-display text-pink-600 mb-4">
-                  {simulatorQuery.isLoading ? (
-                    <div className="h-16 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    `${result?.daily || 0} CMESH`
-                  )}
+                  {result.daily} CMESH
                 </div>
                 <p className="text-sm text-slate-600">
                   Average reward per 24-hour epoch
@@ -159,11 +150,7 @@ export default function Simulator() {
               <div className="relative z-10">
                 <div className="stat-label mb-2">Monthly Earnings</div>
                 <div className="stat-display text-cyan-600 mb-4">
-                  {simulatorQuery.isLoading ? (
-                    <div className="h-16 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    `${result?.monthly || 0} CMESH`
-                  )}
+                  {result.monthly} CMESH
                 </div>
                 <p className="text-sm text-slate-600">
                   Estimated 30-day reward accumulation
@@ -176,11 +163,7 @@ export default function Simulator() {
               <div className="relative z-10">
                 <div className="stat-label mb-2">Yearly Earnings</div>
                 <div className="stat-display text-pink-600 mb-4">
-                  {simulatorQuery.isLoading ? (
-                    <div className="h-16 bg-slate-200 rounded animate-pulse"></div>
-                  ) : (
-                    `${result?.yearly || 0} CMESH`
-                  )}
+                  {result.yearly} CMESH
                 </div>
                 <p className="text-sm text-slate-600">
                   Projected annual reward total
@@ -194,11 +177,7 @@ export default function Simulator() {
                 <div className="relative z-10">
                   <div className="stat-label mb-2 text-pink-600">Verifier Selection Chance</div>
                   <div className="stat-display text-pink-600 mb-4">
-                    {simulatorQuery.isLoading ? (
-                      <div className="h-16 bg-slate-200 rounded animate-pulse"></div>
-                    ) : (
-                      `${result?.verifierChancePct || 0}%`
-                    )}
+                    {result.verifierChancePct ?? 0}%
                   </div>
                   <p className="text-sm text-slate-600">
                     Probability of being selected as epoch verifier

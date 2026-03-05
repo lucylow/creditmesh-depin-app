@@ -49,6 +49,11 @@ export default function Home() {
                 CreditMesh is a DePIN on Creditcoin that lets anyone earn passive income by sharing sensor data, bandwidth, and connectivity through a decentralized, incentivized network.
               </p>
               <div className="flex flex-wrap gap-4">
+                <Link href="/dashboard">
+                  <Button className="bg-primary text-primary-foreground font-bold px-8 py-3">
+                    Open App
+                  </Button>
+                </Link>
                 <Link href="/simulator">
                   <Button className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3">
                     Simulate Earnings

@@ -1,0 +1,5 @@
+[
+  "function listingCounter() view returns (uint256)",
+  "function listings(uint256 id) view returns (uint256 deviceId, uint256 price, uint256 available, uint256 expiry, address seller)",
+  "function listData(uint256 deviceId, uint256 pricePerUnit, uint256 quantity, uint256 durationSeconds)"
+]

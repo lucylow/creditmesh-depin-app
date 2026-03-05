@@ -1,0 +1,3 @@
+[
+  "function totalRewardsDistributed() view returns (uint256)"
+]

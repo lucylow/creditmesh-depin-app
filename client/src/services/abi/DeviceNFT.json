@@ -1,0 +1,7 @@
+[
+  "function totalSupply() view returns (uint256)",
+  "function getDevicesByOwner(address owner) view returns (uint256[])",
+  "function getDeviceInfo(uint256 tokenId) view returns (uint8 deviceType, uint256 reputation, uint256 stakeAmount, uint256 totalEarned, uint256 lastActive)",
+  "function tokenURI(uint256 tokenId) view returns (string)",
+  "function registerDevice(address to, uint8 deviceType, string deviceDID, string metadataURI)"
+]

@@ -1,0 +1,6 @@
+[
+  "function totalStaked() view returns (uint256)",
+  "function getActiveVerifierCount() view returns (uint256)",
+  "function stakeForDevice(uint256 deviceId, uint256 amount)",
+  "function unstakeFromDevice(uint256 deviceId, uint256 amount)"
+]

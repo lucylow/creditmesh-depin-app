@@ -5,6 +5,7 @@ import { Link } from "wouter";
 import { NetworkChart } from "@/components/NetworkChart";
 import { StatCounter } from "@/components/StatCounter";
 import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
+import { ConnectWallet } from "@/components/ConnectWallet";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -49,6 +50,7 @@ export default function Home() {
                 CreditMesh is a DePIN on Creditcoin that lets anyone earn passive income by sharing sensor data, bandwidth, and connectivity through a decentralized, incentivized network.
               </p>
               <div className="flex flex-wrap gap-4">
+                <ConnectWallet />
                 <Link href="/dashboard">
                   <Button className="bg-primary text-primary-foreground font-bold px-8 py-3">
                     Open App

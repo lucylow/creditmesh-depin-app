@@ -4,7 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { Web3Provider } from "./contexts/Web3Context";
+import { WalletProvider } from "./contexts/WalletContext";
 import Home from "./pages/Home";
 import Simulator from "./pages/Simulator";
 import Leaderboard from "./pages/Leaderboard";
@@ -42,23 +42,18 @@ function Router() {
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="light">
-        <Web3Provider>
+      <WalletProvider>
+        <ThemeProvider defaultTheme="light">
           <TooltipProvider>
             <EpochCountdown />
             <Toaster />
             <Router />
           </TooltipProvider>
-        </Web3Provider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </WalletProvider>
     </ErrorBoundary>
   );
 }

@@ -25,10 +25,10 @@ describe("simulator.calculate", () => {
 
     expect(result.stake).toBe(100);
     expect(result.deviceType).toBe("sensor");
-    expect(result.daily).toBe(0.05);
-    expect(result.monthly).toBeCloseTo(1.5, 1);
-    expect(result.yearly).toBeCloseTo(18.25, 1);
-    expect(result.apy).toBe(18.25);
+    expect(result.daily).toBe(0.08);
+    expect(result.monthly).toBeCloseTo(2.4, 1);
+    expect(result.yearly).toBeCloseTo(29.2, 1);
+    expect(result.apy).toBe(29.2);
   });
 
   it("calculates rewards for gateway device type", async () => {
@@ -42,8 +42,8 @@ describe("simulator.calculate", () => {
 
     expect(result.stake).toBe(100);
     expect(result.deviceType).toBe("gateway");
-    expect(result.daily).toBe(0.15);
-    expect(result.apy).toBe(54.75);
+    expect(result.daily).toBe(0.22);
+    expect(result.apy).toBe(80.3);
   });
 
   it("calculates rewards for verifier device type", async () => {
@@ -57,9 +57,9 @@ describe("simulator.calculate", () => {
 
     expect(result.stake).toBe(100);
     expect(result.deviceType).toBe("verifier");
-    expect(result.daily).toBe(0.5);
-    expect(result.apy).toBe(182.5);
-    expect(result.verifierChancePct).toBeCloseTo(1, 1);
+    expect(result.daily).toBe(0.65);
+    expect(result.apy).toBe(237.25);
+    expect(result.verifierChancePct).toBeCloseTo(1.5, 1);
   });
 
   it("scales rewards with stake amount", async () => {
@@ -95,7 +95,7 @@ describe("simulator.calculate", () => {
     });
 
     expect(result2.verifierChancePct).toBeGreaterThan(result1.verifierChancePct);
-    expect(result2.verifierChancePct).toBeLessThanOrEqual(15);
+    expect(result2.verifierChancePct).toBeLessThanOrEqual(25);
   });
 
   it("clamps stake to valid range", async () => {
@@ -129,9 +129,10 @@ describe("simulator.calculate", () => {
       apys.push(result.apy);
     }
 
-    // All APYs should be the same for the same device type
-    expect(apys[0]).toBe(apys[1]);
-    expect(apys[1]).toBe(apys[2]);
-    expect(apys[2]).toBe(apys[3]);
+    // All APYs should be the same for the same device type (29.2 for sensor)
+    expect(apys[0]).toBe(29.2);
+    expect(apys[1]).toBe(29.2);
+    expect(apys[2]).toBe(29.2);
+    expect(apys[3]).toBe(29.2);
   });
 });

@@ -30,7 +30,7 @@ export function UnstakeForm() {
       setError("");
       const { ethers } = await import("ethers");
       const amountWei = ethers.utils.parseEther(amount);
-      const tx = await (stakingPool as { unstakeFromDevice: (id: string, amount: import("ethers").BigNumber) => Promise<unknown> }).unstakeFromDevice(selectedDevice, amountWei);
+      const tx = await (stakingPool as unknown as { unstakeFromDevice: (id: string, amount: import("ethers").BigNumber) => Promise<unknown> }).unstakeFromDevice(selectedDevice, amountWei);
       await (tx as { wait: () => Promise<unknown> }).wait();
       alert("Unstake successful");
       setAmount("");

@@ -20,11 +20,11 @@ export default function CreditMeshMarketplace() {
     if (!marketplace) return;
     setLoading(true);
     try {
-      const total = await (marketplace as { listingCounter: () => Promise<ethers.BigNumber> }).listingCounter();
+      const total = await (marketplace as unknown as { listingCounter: () => Promise<ethers.BigNumber> }).listingCounter();
       const listingPromises: Promise<Listing>[] = [];
       const n = total.toNumber();
       for (let i = 1; i <= n; i++) {
-        const listing = await (marketplace as { listings: (id: number) => Promise<[ethers.BigNumber, ethers.BigNumber, ethers.BigNumber, ethers.BigNumber, string]> }).listings(i);
+        const listing = await (marketplace as unknown as { listings: (id: number) => Promise<[ethers.BigNumber, ethers.BigNumber, ethers.BigNumber, ethers.BigNumber, string]> }).listings(i);
         const [, price, available, expiry, seller] = listing;
         const expiryNum = (expiry as ethers.BigNumber).toNumber();
         if (available.gt(0) && expiryNum > Math.floor(Date.now() / 1000)) {
@@ -34,7 +34,7 @@ export default function CreditMeshMarketplace() {
               const deviceId = (listing[0] as ethers.BigNumber).toString();
               if (deviceNFT) {
                 try {
-                  const tokenURI = await (deviceNFT as { tokenURI: (id: string) => Promise<string> }).tokenURI(deviceId);
+                  const tokenURI = await (deviceNFT as unknown as { tokenURI: (id: string) => Promise<string> }).tokenURI(deviceId);
                   const url = tokenURI.replace("ipfs://", IPFS_GATEWAY);
                   metadata = await fetch(url).then((r) => r.json());
                 } catch {

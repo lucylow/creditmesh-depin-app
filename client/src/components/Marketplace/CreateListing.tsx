@@ -33,7 +33,7 @@ export function CreateListing() {
     try {
       const priceWei = ethers.utils.parseEther(price);
       const durationSeconds = parseInt(duration, 10) * 24 * 60 * 60;
-      const tx = await (marketplace as { listData: (deviceId: string, price: import("ethers").BigNumber, quantity: string, duration: number) => Promise<unknown> }).listData(
+      const tx = await (marketplace as unknown as { listData: (deviceId: string, price: import("ethers").BigNumber, quantity: string, duration: number) => Promise<unknown> }).listData(
         selectedDevice,
         priceWei,
         quantity,

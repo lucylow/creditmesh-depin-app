@@ -29,8 +29,12 @@ export function StakeForm() {
   useEffect(() => {
     const fetchAllowance = async () => {
       if (!cmesh || !stakingPool || !account) return;
-      const all = await cmesh.allowance(account, stakingPool.address);
-      setAllowance(all as ethers.BigNumber);
+      try {
+        const all = await cmesh.allowance(account, stakingPool.address);
+        setAllowance(all as ethers.BigNumber);
+      } catch (err) {
+        console.error("[StakeForm] Failed to fetch allowance:", err);
+      }
     };
     fetchAllowance();
   }, [cmesh, stakingPool, account]);

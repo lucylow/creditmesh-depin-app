@@ -21,13 +21,23 @@ async function create() {
 
 async function getClient() {
   if (!ipfsClient) {
-    ipfsClient = await create();
+    try {
+      ipfsClient = await create();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      throw new Error(`Failed to connect to IPFS: ${message}. Check your network and Infura credentials.`);
+    }
   }
   return ipfsClient;
 }
 
 export async function uploadToIPFS(file: File | Blob): Promise<string> {
-  const client = await getClient();
-  const added = await client.add(file);
-  return added.path;
+  try {
+    const client = await getClient();
+    const added = await client.add(file);
+    return added.path;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Upload failed";
+    throw new Error(`IPFS upload failed: ${message}`);
+  }
 }

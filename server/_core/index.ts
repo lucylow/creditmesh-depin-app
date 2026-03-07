@@ -57,9 +57,19 @@ async function startServer() {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
+  server.on("error", (err: NodeJS.ErrnoException) => {
+    console.error("HTTP server error:", err);
+    if (err.code === "EADDRINUSE") {
+      console.error(`Port ${port} is already in use.`);
+    }
+  });
+
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((err: unknown) => {
+  console.error("Server failed to start:", err);
+  process.exit(1);
+});

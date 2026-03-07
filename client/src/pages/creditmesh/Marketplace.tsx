@@ -7,6 +7,7 @@ import { CreateListing } from "@/components/Marketplace/CreateListing";
 import { Navbar } from "@/components/Layout/Navbar";
 import { Footer } from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
+import { ErrorAlert } from "@/components/common/ErrorAlert";
 import { IPFS_GATEWAY } from "@/services/contractAddresses";
 
 export default function CreditMeshMarketplace() {
@@ -14,11 +15,13 @@ export default function CreditMeshMarketplace() {
   const { marketplace, deviceNFT } = useContracts();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
   const fetchListings = async () => {
     if (!marketplace) return;
     setLoading(true);
+    setError(null);
     try {
       const total = await (marketplace as unknown as { listingCounter: () => Promise<ethers.BigNumber> }).listingCounter();
       const listingPromises: Promise<Listing>[] = [];
@@ -57,7 +60,10 @@ export default function CreditMeshMarketplace() {
       const results = await Promise.all(listingPromises);
       setListings(results);
     } catch (err) {
-      console.error(err);
+      const message = err instanceof Error ? err.message : "Failed to load listings";
+      setError(message);
+      setListings([]);
+      console.error("[Marketplace] fetchListings error:", err);
     } finally {
       setLoading(false);
     }
@@ -83,11 +89,17 @@ export default function CreditMeshMarketplace() {
           <CreateListing />
         ) : (
           <>
+            {error && (
+              <ErrorAlert
+                title="Could not load listings"
+                message={error}
+              />
+            )}
             {loading ? (
               <div className="text-center py-10 text-muted-foreground">Loading listings...</div>
-            ) : listings.length === 0 ? (
+            ) : listings.length === 0 && !error ? (
               <div className="text-center py-10 text-muted-foreground">No active listings</div>
-            ) : (
+            ) : !error ? (
               <div className="grid md:grid-cols-3 gap-6">
                 {listings.map((listing) => (
                   <ListingCard
@@ -97,7 +109,7 @@ export default function CreditMeshMarketplace() {
                   />
                 ))}
               </div>
-            )}
+            ) : null}
           </>
         )}
       </main>

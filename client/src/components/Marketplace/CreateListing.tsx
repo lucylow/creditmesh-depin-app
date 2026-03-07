@@ -27,7 +27,14 @@ export function CreateListing() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!marketplace || !selectedDevice) return;
+    if (!marketplace) {
+      setError("Marketplace contract not available. Please connect your wallet.");
+      return;
+    }
+    if (!selectedDevice) {
+      setError("Please select a device.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {

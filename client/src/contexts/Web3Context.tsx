@@ -9,6 +9,7 @@ interface Web3ContextType {
   connect: () => Promise<void>;
   disconnect: () => void;
   isActive: boolean;
+  connectionError: string | null;
 }
 
 const Web3Context = createContext<Web3ContextType>({} as Web3ContextType);
@@ -21,10 +22,12 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
   const [account, setAccount] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [isActive, setIsActive] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
   const connect = async () => {
+    setConnectionError(null);
     if (!window.ethereum) {
-      alert("Please install MetaMask");
+      setConnectionError("Please install MetaMask or another Web3 wallet.");
       return;
     }
     try {
@@ -39,7 +42,9 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       setChainId(network.chainId);
       setIsActive(true);
     } catch (error) {
-      console.error("Connection failed:", error);
+      const message = error instanceof Error ? error.message : "Connection failed";
+      setConnectionError(message);
+      console.error("Web3 connection failed:", error);
     }
   };
 
@@ -49,6 +54,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
     setAccount(null);
     setChainId(null);
     setIsActive(false);
+    setConnectionError(null);
   };
 
   useEffect(() => {
@@ -64,7 +70,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <Web3Context.Provider
-      value={{ provider, signer, account, chainId, connect, disconnect, isActive }}
+      value={{ provider, signer, account, chainId, connect, disconnect, isActive, connectionError }}
     >
       {children}
     </Web3Context.Provider>
